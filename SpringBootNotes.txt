@@ -1,0 +1,575 @@
+Spring Framework
+======================================================================================================
+                                Loosely coupling / Tightly coupling
+======================================================================================================
+Coupling -> how much work is involved in changing something
+
+Loosely coupling can we achieved using interfaces, java spring, java springboot
+Example
+
+Tightly coupling
+GameRunner class -> Game1, Game2 class
+Any change in Game1, Game2 will impact a change in GameRunner too.
+
+Lossely Coupling 1 (interfaces)
+
+GameRunner class -> GamingConsole Interface -> Game1, Game2
+
+Any change in Game1, Game2 won't have any impact on GameRunner.
+
+======================================================================================================
+                               IOC container/ Spring Bean
+======================================================================================================
+Spring Container/ IOC container -> it manages spring beans and their lifecycle, application context is advanced spring container
+for enterprise-specific features.
+
+It is called inversion of control because we don't need to create any new object everytime, we just to 
+ask the IOC container for the object and if it is a spring bean, IOC container will handle its creation and lifecycle.
+
+Bean Factory -> Basic Spring IOC container
+Application Context -> Adanced Spring IOC Container for web applications and AOP.
+
+POJO(Plain old java object)/ Enterprise JavaBean/ Spring beans
+POJO -> They are simple classes with methods and attributes
+
+JavaBean -> 
+1. It should have noargs constructor.
+2. It should have getter and setters.
+3. It should implement Serializer interface.
+
+"Spring Bean" ->
+Any object managed by IOC/ spring container is called spring bean.
+
+To create a spring Bean, We need to launch a spring context and we need a Configuration class. 
+
+// Configuration Class
+record Person(String name, int age) {} 
+record Address(String firstLine, String secondLine){}  
+
+@Configuration
+public class DemoConfiguration {
+
+    @Bean // Bean is used to identify the entity as a bean by spring container.
+    public String name(){
+        return "Bhushan";
+    }
+
+
+    @Bean
+    public Person person(){
+        return new Person("Alice", 20);
+    }
+
+    @Bean
+    public Person person2(){
+        return new Person("Bob", 30);
+    }
+
+    @Bean(name = "address1")
+    @Primary // it used when we have ambiguity in bean names when accessed through Address.class.
+    public Address address(){
+        return new Address("First line", "Second line");
+    }
+
+    @Bean(name = "address2")
+    public Address address(){
+        return new Address("ABC lane", "Pune");
+    }
+}
+
+void main(){
+    // ApplicationContext
+    var context = new AnnotationConfigApplicationContext(DemoConfiguration.class);
+
+    // Access the beans
+    System.out.println(context.getBean("name"));
+    System.out.println(context.getBean("person"));
+    System.out.println(context.getBean("address2"));
+    System.out.println(context.getBean(Address.class));
+
+    // Getting all the beans
+    Arrays.stream(context.getBeanDefinitionNames()).forEach(System.out::println); 
+
+
+}
+
+==================================================================================================
+                            Making spring manage the beans
+=====================================================================================================
+
+@Configuration // we create the main class as configuration class which will manage all the beans
+@ComponentScan("com.example.<package_name>") // we suggested spring to search for beans in the given package
+public class Main{
+    public static void main(String []args){
+        var context = new AnnotationConfigApplicationContext(Main.class);
+
+        context.getBean(GameRunner.class).run(); 
+        // Lets consider the GameRunner class requires an object to be passed which the type of game.
+        // Spring will identify the type of object and autowire it with GameRunner.
+    }
+}
+
+@Component // spring identifies it as Bean (instance of class will be managed by spring)
+public class GameRunner {
+    GamingConsole game;
+
+    public GameRunner(@Qualifier("SuperGame") GamingConsole game){ // To make spring identify which bean to use
+        this.game = game;
+    }
+
+    public void run() {
+        
+        System.out.println("Running the game: "+ game);
+
+        game.up();
+        game.down();
+        game.left();
+        game.right();
+    }
+}
+
+public interface GamingConsole {
+    void up();
+    void down();
+    void left();
+    void right();
+}
+
+@Component
+@Primary // To give the bean as first priority if there are multiple beans.
+public class MarioGame implements GamingConsole {
+    public void up(){
+        System.out.println("Jump");
+    }
+
+    public void down(){
+        System.out.println("Go to hole");
+    }
+
+    public void left(){
+        System.out.println("Go back");
+    }
+
+    public void right(){
+        System.out.println("move forward");
+    }
+}
+
+
+@Component
+@Qualifier("SuperGame") // To make spring identify the bean when used by this Qualifier
+public class SuperGame implements GamingConsole{
+    public void up(){
+        System.out.println("Up");
+    }
+
+    public void down(){
+        System.out.println("Sit Down");
+    }
+
+    public void left(){
+        System.out.println("Go back");
+    }
+
+    public void right(){
+        System.out.println("Shoot");
+    }
+}
+
+@Controller -> if we have a controller (web controller).
+@Service -> class which has business logic.
+@Repository -> class used to retrieve and manipulate data in database.
+
+
+==================================================================================================
+                            Dependency injection
+=====================================================================================================
+Indentify the beans, their dependencies and wire them together, is called dependency injection.
+
+Field injection
+When we use @Autowired on any field we call it field injection.
+@Autowired
+Myclass myclass 
+
+Setter injection
+When we use @Autowired on any setter we call it field injection.
+@Autowired
+public void setter(Myclass myclass){
+    this.myclass = myclass;
+}
+
+Constructor injection
+When we access the values using paramterized constructor it is called constructor injection,
+we don't need to use keyword @Autowired on a Constructor
+
+MyConstructor(Myclass myclass){
+    this.myclass = myclass;
+}
+
+=====================================================================
+                        Lazy initialization
+=====================================================================
+
+In lazy initialization bean is initialized when it is first made use in the application.
+It is not by default, we need to add @Lazy to any component.
+Any error in result will be a runtime exception in lazy initialization.
+It is not mostly used.
+
+=====================================================================
+                       Prototype class / Singleton class
+=====================================================================
+
+Whenever we create a Bean/ Component in spring it is singleton.
+If we want different instance every time we can make the component as prototype.
+
+@Component
+@Lazy // or Lazy(value=true)
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+class myPrototypeClass{
+
+}
+
+Spring Singleton - one object instance per Spring IOC container
+Java Singleton - one object instance per JVM
+
+=====================================================================
+                       PostConstruct/ PreDestroy
+=====================================================================
+When we want to initialize something just after we have wired all the dependencies
+or if we want to clear out something once the use of dependencies is complete
+we can use PostConstruct and PreDestroy.
+
+Here once the dependencies are wired from B -> A, the print() will be called
+automatically, and once use of dependencies is complete the cleanup() method
+will be called.
+
+@Component
+class A{
+    void initialize(){
+
+    }
+}
+
+@Component
+class B{
+    A a;
+    B(A a){
+        this.a = a;
+    }
+
+    @PostConstruct
+    public void print(){
+        a.initialize();
+    }
+
+    @PreDestroy
+    public void cleanup(){
+        System.out.println("Cleaning up");
+    }
+}
+
+=====================================================================
+                       Spring Boot
+=====================================================================
+
+Spring Boot Auto Configuration reduces the amount of configuration needed to build Spring applications by providing automated configuration
+
+@SpringBootApplication annotation is a combination of 3 annotations: @SpringBootConfiguration + @EnableAutoConfiguration + @ComponentScan
+
+@RestController -> for web controller/ Rest api controller
+
+We can use Lambok, for getter,setter etc.
+
+@Data -> Lambok Annotation which will provide Getter,Setter, RequiredArgsConstructor, ToString, EqualsAndHashCode.
+@AllArgsConstructor -> Provide paramterized constructor for all fields.
+@NoArgsConstructor -> Provide a default constructor.
+
+@RequestMapping -> to set the endpoint of api, mostly applied on classes.
+
+@RequestMapping("/courses")
+class Controller{
+
+    @GetMapping // default mapping will be get request on /courses.
+    public List<Courses> getALLCourses(){
+        ...
+    }
+
+    @PutMapping
+    public boolean update(){
+        ...
+    }
+
+    @PostMapping("{id}")
+    public boolean create(){
+
+    }
+
+    @DeleteMapping("{id}")
+    public boolean delete(){
+
+    }
+}
+
+Dependency Addition to pom.xml
+Add the required dependencies and then run "./mvnw clean install" to download those dependencies.
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-devtools</artifactId>
+</dependency>
+
+=====================================================================
+                       Profiles
+=====================================================================
+
+The one of the main advance of using spring boot is that we can have different profiles (dev/prod/test).
+
+In spring boot project we have a "application.properties" file which will configuring various application settings,
+including debug mode, server port, server url etc.
+
+Eg:- 
+#Profiles
+spring.profiles.active=dev  
+
+# Server Configuration
+server.port=8081
+
+# Logging Configuration
+logging.level.org.springframework=INFO
+
+This configuration can be different for dev/prod/test environments, which can be achieved using profiles.
+
+//Creating dev profile
+application-dev.properties
+# Server Configuration
+server.port=8080
+
+# Logging Configuration
+logging.level.org.springframework=DEBUG
+
+//Creating prod profile
+application-prod.properties
+# Server Configuration
+server.port=8000
+
+# Logging Configuration
+logging.level.org.springframework=TRACE
+
+
+In this way we can have different profiles in spring. 
+This same behaviour can be achieved using "app.yaml" file.
+
+
+=====================================================================
+                       configuration Properties
+=====================================================================
+We can configure our properties in application.properties, but when we can to use the 
+values of this properties we can use configuration properties.
+
+Eg:-
+
+currency-service.url="/currency/new"
+currency-service.username="root"
+currency-service.passwd="toor"
+
+@ConfigurationProperties(prefix = "currency-service") // this will config the values from application.properties
+@Component
+@Data
+class CurrencyServiceConfiguration{
+    private String url;
+    private String username;
+    private String passwd;
+}
+
+
+@GetMapping("/currency")
+public CurrencyServiceConfiguration getCurrencyData(){
+    return currencyconfig;
+}
+
+
+=====================================================================
+                       Deployment/ Actuator
+=====================================================================
+
+run command "./mvnw clean install"
+
+A jar file will be created 
+
+{project_name}-0.0.1-SNAPSHOT.jar  // dependencies installed in it, also called as FAT JAR.
+{project_name}-0.0.1-SNAPSHOT.jar.original // dependencies will be installed when run
+
+Run the jar file -> java --jar <file_name>.jar
+
+
+"Actuator"
+
+It is used to monitor and manage the application at the time of production.
+It provides a number of endpoints
+beans - Complete list of spring beans in your app
+health - Application health information.
+
+
+=====================================================================
+                       Connection to H2 DB
+=====================================================================
+
+include the dependencies in pom.xml
+
+inside application.properties
+
+# H2 Configuration
+spring.h2.console.enabled=true
+spring.h2.console.path=/h2-console/
+spring.datasource.url=jdbc:h2:mem:testdb
+spring.datasource.driver-class-name=org.h2.Driver
+spring.jpa.defer-datasource-initialization=true // To take data from data.sql 
+
+open localhost:8080/h2/console in browser and paste "jdbc:h2:mem:testdb" in the url.
+
+create a "schema.sql" file in resources directory and create a table and reload the app.
+CREATE TABLE Course(
+    id bigint not null,
+    name varchar(255) not null ,
+    author varchar(255) not null ,
+    primary key (id)
+);
+
+=====================================================================
+                       Spring JDBC
+=====================================================================
+
+// in old jdbc we need to write a lot of queries and lot of java code
+// in spring jdbc we need to write lot queries but less java code.
+
+@Repository // which will interact with the database.
+public class CourseRepository {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    private String INSERT_QUERY =
+            """
+                INSERT INTO Course (id, name, author)
+                values (?, ?, ?);
+            """;
+    public void insert(Course course){
+        jdbcTemplate.update(INSERT_QUERY, course.getId(), course.getName(), course.getAuthor()); 
+
+        // update() can be used for insert, update, delete
+    }
+
+}
+
+@Component
+public class CourseCmdRunner implements CommandLineRunner { 
+
+    @Autowired
+    private CourseRepository repository;
+
+    @Override
+    public void run(String... args) throws Exception {  // will be executed when the app will start.
+        repository.insert(new Course(1L, "Java", "ABC"));
+    }
+}
+
+=====================================================================
+                       JPA (Java Persistence API/ Jakarta Persistence API)
+=====================================================================
+
+// We need to write less queries
+// JPA is an API, while hibernate is one of the popular implementation of JPA.
+
+@Repository
+@Transactional
+public class CourseRepository {
+
+    @PersistenceContext // expresses dependency on a container managed by entityManager
+    private EntityManager entityManager;
+
+    public void insert(Course course){
+        entityManager.merge(course);
+    }
+
+    public Course findById(Long id){
+        return entityManager.find(Course.class, id);
+    }
+
+    public void delete(Long id){
+        Course c = findById(id);
+        entityManager.remove(c);
+    }
+}
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+public class Course {
+    @Id
+    private Long id;
+    private String name;
+    private String author;
+}
+
+//Validations
+private String firstName;
+	
+@NotNull(message="is required")
+@Size(min=1, message="is required")
+private String lastName;
+
+@NotNull(message="is required")
+@Min(value=0, message="must be greater than or equal to zero")
+@Max(value=10, message="must be less than or equal to 10")
+private Integer freePasses;
+
+@Pattern(regexp="^[a-zA-Z0-9]{5}", message="only 5 chars/digits")
+private String postalCode;
+
+@CourseCode(value="TOPS", message="must start with TOPS")
+private String courseCode;
+
+=====================================================================
+                       Spring Data JPA 
+=====================================================================
+// it makes it more simpler to interact with DB.
+
+public interface CourseRepository extends JpaRepository<Course, Long> {
+    List<Course> findByAuthor(String Author); // a custom method, need to be defined as given in example, no need to implement.
+}
+
+// The course class is same as above.
+
+
+=====================================================================
+                    Create relation between tables
+=====================================================================
+@Entity(name = "users")
+public class Users {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    private LocalDate dob;
+
+    @OneToMany(mappedBy = "users")
+    @JsonIgnore // ignore this entity
+    private List<Posts> posts;
+
+}
+
+public class Posts {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String description;
+
+    @ManyToOne
+    @JsonIgnore
+    private Users user;
+}
