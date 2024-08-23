@@ -26,18 +26,13 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Users updateUser(Users newUser, Long id){
-            Users oldUser = userRepository.findById(id).orElse(null);
-            if(oldUser != null){
-                oldUser.setName(!newUser.getName().equals("") ? newUser.getName() : oldUser.getName());
-                oldUser.setDob( newUser.getDob()!= null ? newUser.getDob():oldUser.getDob() );
-                return userRepository.save(oldUser);
-            }
-            return null;
+    public boolean deleteUser(String username){
+        Users user = userRepository.findByUsername(username);
+        userRepository.deleteById(user.getId());
+        return true;
     }
 
-    public boolean deleteUser(Long id){
-        userRepository.deleteById(id);
-        return true;
+    public Users findByUserName(String username){
+            return userRepository.findByUsername(username);
     }
 }
