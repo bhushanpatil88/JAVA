@@ -5,6 +5,7 @@ import com.REST.REST.entity.Posts;
 import com.REST.REST.entity.Users;
 import com.REST.REST.service.PostsService;
 import com.REST.REST.service.UserService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -73,11 +74,13 @@ public class UserController {
 
 
     @PostMapping("{username}/posts")
+    @Transactional // Ensure that either the complete code is success or nothing is executed.
     public ResponseEntity<?> createPost(@PathVariable String username,@Validated @RequestBody Posts post){
         Users user = userService.findByUserName(username);
         if(user!=null) {
             post.setUser(user);
             postsService.createPost(post);
+            //user.setUsername(null);
             return new ResponseEntity<>(user.getPosts(), HttpStatus.CREATED);
         }
         else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -86,6 +89,7 @@ public class UserController {
 
 
     @PutMapping("{username}/posts/{post_id}")
+    @Transactional
     public ResponseEntity<?> updatePost(@RequestBody Posts newPost, @PathVariable String username, @PathVariable Long post_id){
         Users user = userService.findByUserName(username);
         if(user!=null){
@@ -110,6 +114,7 @@ public class UserController {
 
 
     @DeleteMapping("{username}/posts/{post_id}")
+    @Transactional
     public ResponseEntity<?> deletePost(@PathVariable String username, @PathVariable Long post_id){
         Users user = userService.findByUserName(username);
         if(user!=null){

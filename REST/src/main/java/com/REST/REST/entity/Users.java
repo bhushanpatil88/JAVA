@@ -30,7 +30,7 @@ public class Users {
 
     private LocalDate dob;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
 //    @DBRef, For MongoDB
     private List<Posts> posts = new ArrayList<>();

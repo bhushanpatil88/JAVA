@@ -3,6 +3,7 @@ package com.REST.REST.service;
 
 import com.REST.REST.entity.Users;
 import com.REST.REST.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
