@@ -1,38 +1,32 @@
 package com.REST.REST.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.stereotype.Indexed;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import java.time.LocalDate;
-
-
+@Document(collection = "users")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "users")
-//@Document(Collection = "users")
 public class Users {
 
     @Id
-    private Long id;
-
+    private ObjectId id;
+    @Indexed(unique = true)
     @NonNull
-    @Column(name = "username", unique = true)
-    //@Indexed(unique=true), For MongoDB to have unique name
-    // for the application.properties should contain spring.data.mongodb.auto-index-creation=true
-     private String username;
-
-    private LocalDate dob;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-//    @DBRef, For MongoDB
+    private String userName;
+    private String email;
+    @NonNull
+    private String password;
+    @DBRef
     private List<Posts> posts = new ArrayList<>();
-
+    private List<String> roles = new ArrayList<>();
 }

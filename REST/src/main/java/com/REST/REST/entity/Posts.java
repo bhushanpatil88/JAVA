@@ -1,24 +1,23 @@
 package com.REST.REST.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
+import java.time.LocalDateTime;
+
+
+@Document(collection = "posts")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Posts {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String description;
-
-    @ManyToOne
-    @JsonIgnore
-    private Users user;
+    private ObjectId id;
+    @NonNull
+    private String title;
+    private String content;
+    private LocalDateTime date;
 }

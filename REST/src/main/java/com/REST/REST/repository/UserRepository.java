@@ -1,11 +1,12 @@
 package com.REST.REST.repository;
 
 import com.REST.REST.entity.Users;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 
-@Repository
-public interface UserRepository extends JpaRepository<Users, Long> {
-    Users findByUsername(String username);
+public interface UserRepository extends MongoRepository<Users, ObjectId> {
+    Users findByUserName(String username);
+
+    void deleteByUserName(String username);
 }

@@ -1,9 +1,11 @@
 package com.REST.REST.repository;
 
 import com.REST.REST.entity.Posts;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PostsRepository extends JpaRepository<Posts, Long> {
+public interface PostsRepository extends MongoRepository<Posts, ObjectId> {
+
 }

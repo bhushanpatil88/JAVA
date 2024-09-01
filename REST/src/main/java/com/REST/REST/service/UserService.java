@@ -3,10 +3,12 @@ package com.REST.REST.service;
 
 import com.REST.REST.entity.Users;
 import com.REST.REST.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -15,9 +17,28 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public Users getUserById(Long id){
-        return userRepository.findById(id).orElse(null);
+    private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+
+    public boolean saveNewUser(Users user) {
+        try {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setRoles(List.of("USER"));
+            userRepository.save(user);
+            return true;
+        } catch (Exception e) {
+
+            return false;
+        }
     }
+
+    public void saveAdmin(Users user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(Arrays.asList("USER", "ADMIN"));
+        userRepository.save(user);
+    }
+
+
 
     public List<Users> getAllUsers(){
         return userRepository.findAll();
@@ -28,12 +49,11 @@ public class UserService {
     }
 
     public boolean deleteUser(String username){
-        Users user = userRepository.findByUsername(username);
-        userRepository.deleteById(user.getId());
+        userRepository.deleteByUserName(username);
         return true;
     }
 
     public Users findByUserName(String username){
-            return userRepository.findByUsername(username);
+        return userRepository.findByUserName(username);
     }
 }
