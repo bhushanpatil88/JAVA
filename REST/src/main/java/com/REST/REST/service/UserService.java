@@ -19,6 +19,8 @@ public class UserService {
 
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+    @Autowired
+    private RedisService redisService;
 
     public boolean saveNewUser(Users user) {
         try {
@@ -41,7 +43,15 @@ public class UserService {
 
 
     public List<Users> getAllUsers(){
-        return userRepository.findAll();
+        List<Users> users = redisService.get("allUsers", List.class);
+
+        if (users != null && !users.isEmpty()) {
+            return users;
+        }
+
+        users = userRepository.findAll();
+        redisService.set("allUsers", users, 600L);
+        return users;
     }
 
     public Users createUser(Users user){

@@ -491,6 +491,8 @@ public final class UtilityClass {
     // Class code
 }
 
+final keyword cannot be applied to contrustors as they are never overridden.
+
 //finalize 
 finalize() method is a method defined in the Object class that can be overridden 
 by subclasses to perform cleanup operations before an object is garbage collected. 
@@ -524,6 +526,79 @@ e.print(); // It is an integer  with value 10
 
 Example<String> e = new Example("ABCD");
 e.print(); // It is String with value "ABCD"
+
+
+========================================================================================================
+
+                                Inner classes
+
+=========================================================================================================
+1. Member inner class
+
+When we want to create a class inside another class
+
+public class OuterClass {
+    private String outerField = "Outer field value";
+
+    public class InnerClass {
+        public void display() {
+            System.out.println("Outer field: " + outerField);
+        }
+    }
+}
+
+OuterClass outer = new OuterClass();
+OuterClass.InnerClass inner = outer.new InnerClass();
+inner.display();
+
+2. Static inner class
+public class OuterClass {
+    private static String staticOuterField = "Static outer field value";
+    private String nonStaticOuterField = "Non-static outer field value";
+
+    public static class StaticNestedClass {
+        public void display() {
+
+            System.out.println("Static outer field: " + staticOuterField);
+
+            // Cannot access non-static members of the outer class
+            // System.out.println("Non-static outer field: " + nonStaticOuterField); // This would cause a compile-time error
+        }
+    }
+
+    public static void main(String[] args) {
+        OuterClass.StaticNestedClass nested = new OuterClass.StaticNestedClass();
+        nested.display();
+    }
+}
+
+3. Local inner class
+
+public class OuterClass {
+    private String outerField = "Outer field value";
+
+    public void outerMethod() {
+        final String localVariable = "Local variable value";
+
+        class LocalInnerClass {
+            public void display() {
+
+                System.out.println("Outer field: " + outerField);
+                System.out.println("Local variable: " + localVariable);
+            }
+        }
+        LocalInnerClass inner = new LocalInnerClass();
+        inner.display();
+    }
+
+    public static void main(String[] args) {
+        OuterClass outer = new OuterClass();
+        outer.outerMethod();
+    }
+}
+
+
+
 
 ========================================================================================================
 

@@ -583,6 +583,13 @@ public class Posts {
 @Transactional -> it is used to ensure that either entire operation is a complete success, or no operation is executed.
 // If we have spring-boot-starter-data-jpa, in pom.xml we don't need any external configuration for it.
 
+@EnableTransactionManagement -> Added inside spring boot application.
+
+@Bean
+public PlatformTransactionManager MyTransaction(MongoDatabaseFactory dbFactory){
+    return new MongoTransactionManager(dbFactory);
+}
+
 =====================================================================
                     Spring Security
 =====================================================================
@@ -844,3 +851,72 @@ public class UserControllerTest {
                     Logging
 =====================================================================
 Different logging levels (TRACE, DEBUG, INFO, WARN, ERROR) they are ordered based on severity.
+
+
+@slf4j
+public class MyClass{
+
+    public print(){
+        log.error("Error occured");
+    }
+}
+
+using application properties
+logging.level.com.REST.REST = TRACE 
+
+=====================================================================
+                    Mongo Template / Criteria Query
+=====================================================================
+
+We use mongoTemplate to interact with the database, and criteria query to generate custom queries.
+
+@Component
+public class UserCriteriaQuery {
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
+    
+    public List<Users> getAllValidEmailUsers(){
+        String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+        Query query = new Query();
+        query.addCriteria(Criteria.where("email").regex(emailRegex));
+        query.addCriteria(Criteria.where("roles").in("USERS","ADMIN"));
+        return mongoTemplate.find(query, Users.class);
+    }
+}
+
+=====================================================================
+                    Scheduler
+=====================================================================
+
+We can schedule a specific task for specific intervals in spring boot
+
+@Scheduled(fixedDelay = 100, initialDelay = 2000)
+void task(){
+
+}
+
+inside springbootApp add annotation.
+@EnableScheduling
+public class MyApp{
+    
+}
+
+
+=====================================================================
+                    Kafka
+=====================================================================
+
+It is opensource distributed event streaming platform. It is designed to handle data that is
+constantly being generated and needs to be processed as it comes in, without delays.
+
+
+kafka producer -> kafka cluster -> kafka consumer
+
+Zookeper  -> keeps track of kafka cluster health
+kafka connect -> to bring inside kafka cluster from external entity.
+
+Producer will produce a message in form of topic, topic will store data in partitions.
+
+The data in partition will be stored in form of Round Robin method, if any key isn't provided to it.
+If key:value are provided, data with same key will be in same partition.
