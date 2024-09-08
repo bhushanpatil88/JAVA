@@ -310,7 +310,7 @@ class Controller{
     }
 }
 
-Dependency Addition to pom.xml
+Dependency Addition to pom.xml (project object model)
 Add the required dependencies and then run "./mvnw clean install" to download those dependencies.
 <dependency>
     <groupId>org.springframework.boot</groupId>
@@ -679,6 +679,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         throw new UsernameNotFoundException("User not found with username: " + username);
     }
+
+    //Creating a in-memory user.
+    /*
+        @Bean
+        public UserDetailsService userDetailService(){
+            var user = Users.builder().username("root").password("{noop}toor").roles("USER").build();
+            return new InMemoryUserDetailsManager(user)
+        }
+    */ 
 }
 
 Whenever a request is send it first passes through a layer of filters and then, it is recieved by 
@@ -690,6 +699,22 @@ be provided by authenticationProvider. The reverse wil happen for response.
             Filter A                                                 AuthenticationProvider A
 request ->  Filter B    Authentication  -> AuthenticationManager ->  AuthenticationProvider B -> UserDetailsService -> UserRepo -> DB
             Filter C       Filter                                    AuthenticationProvider C
+
+
+=====================================================================
+                    Spring Security Cors
+=====================================================================
+To make frontend interact with backend.
+@Bean
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/**")
+						.allowedMethods("*")
+						.allowedOrigins("http://localhost:5173");
+			}
+		};
+	}
                                                                  
 =====================================================================
                     YAML, XML, application.properties
@@ -901,7 +926,79 @@ inside springbootApp add annotation.
 public class MyApp{
     
 }
+=====================================================================
+                    Aspect oriented programming (AOP)
+=====================================================================
+In AOP we interrupt the method flow and add our own logic before or after the method execution.
 
+We create a Aspect class, define the pointcuts and then apply the aspect.
+
+Pointcut -> where to apply the aspect.
+
+Advice -> the logic of the code.
+
+Weaver -> framework which implements AOP. (AspectJ or Spring AOP).
+
+Join point -> execution of advice is called join point.
+
+@Configuration
+@Aspect
+@slf4j
+class LogAspect{  //Aspect
+
+    @Before("execution(com....)")  //point cut
+    void print(JoinPoint joinPoint){  // Advice
+        log.infor("Aspect running before the package {}", joinPoint);
+    }
+
+    @Around("execution(com....)")  //pointcut
+    public Object display(ProceedingJoinPoint pjp){
+        
+        // code before joinpoint execution.
+
+        Object val = pjp.proceed(); // execution of the method.
+
+        // code after method execution.
+
+        return val;
+    }
+}
+
+// Creating custom annnotations.
+
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface MyAnnotation{
+
+}
+
+=====================================================================
+                    Docker
+=====================================================================
+
+Docker image ->  A package representing specific version of your application.
+Docker registry -> A place to store docker images.
+Docker hub -> A registry to host docker images.
+Docker repository -> Docker images of specific app.
+Docker container -> Runtime instance of docker image.
+Dockerfile -> File with instructions to create a Docker image.
+
+Commands
+docker container run -d -p 5000:5000 myApp/hello-world-docker:v1 // to run docker image
+
+-p 5000:5000 host system port: Application port
+
+docker container ls // list of all the containers.
+docker image ls // list of all the images.
+docker container stop  <key> // Stop container.
+docker build -t myApp/hello-world-docker:v1 .   // To execute the Dockerfile which contains code to convert into docker image.
+
+Maven plugin to create docker image
+mvn spring-boot:repackage
+mvn spring-boot:run 
+mvn spring-boot:start
+mvn spring-boot:stop
+mvn spring-boot:build-image
 
 =====================================================================
                     Kafka
