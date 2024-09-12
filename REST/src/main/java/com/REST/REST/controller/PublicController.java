@@ -1,5 +1,6 @@
 package com.REST.REST.controller;
 
+import com.REST.REST.customAnnotation.MyAnnotation;
 import com.REST.REST.entity.Users;
 import com.REST.REST.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ public class PublicController {
 
 
     @GetMapping("/health-check")
+    @MyAnnotation
     public String healthCheck() {
         return "Ok";
     }

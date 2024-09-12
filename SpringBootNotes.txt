@@ -711,7 +711,7 @@ To make frontend interact with backend.
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
 						.allowedMethods("*")
-						.allowedOrigins("http://localhost:5173");
+						.allowedOrigins("*");
 			}
 		};
 	}
@@ -1017,3 +1017,25 @@ Producer will produce a message in form of topic, topic will store data in parti
 
 The data in partition will be stored in form of Round Robin method, if any key isn't provided to it.
 If key:value are provided, data with same key will be in same partition.
+
+
+
+=====================================================================
+                    Interview questions
+=====================================================================
+Q1. What is spring boot?
+Framework to create and run java applications.
+It provides main features like 
+a.AutoConfiguration 
+b.Dependency Management
+c. Embedded Servers
+d. Production ready applications.
+
+Q2. How it works?
+Starts by scanning dependencies in pom.xml.
+Then download and autoconfig the module as you include it in pom.xml
+
+Q3 How it starts?
+Starts by calling main() method of your main class.
+The run() method of SpringBootApplication is called. 
+This method starts the application by creatingan application context and initializing it.
