@@ -519,6 +519,12 @@ class Example <T> { // <T> makes the class generic, we need to specify type whil
             System.out.println("It is an integer with value %d", this.myVar);
         }
     }
+
+    //generic method
+    // The return type and parameter should be K.
+    public static <K> K display(K k){
+        return k;
+    }
 }
 
 Example<Integer> e = new Example(10);
@@ -855,6 +861,30 @@ Set<Map.Entry<Integer, String>> entries = mp.entrySet(); // returns set of all k
 for(Map.Entry<Integer,String> entry:entries){
     System.out.println(entry.getKey() + ", " + entry.getValue());
 }
+
+Q1 Which Data structure does HashMap represent? ->HashTable
+
+Q2 Which Data structures are used to create HashMap in java? -> Array, LinkedList.
+Working, 
+mp.put(k,v); -> hash = hash(k); index = hash&(n-1);
+It is the index of the array, where every element of the arrray is a linkedlist.
+If there are alot of collisions, it will internally get converted to BST.
+
+mp.get(k); -> hash = has(k); index = hash&(n-1);
+Go to the index travel the LinkedList and compare the Key and return the value;
+The Node of LinkedList has a structure of (Hash, Key, Value, NextAddress);
+
+Q3 Is HashMap thread safe?-> No
+Q4 What is load factor? -> It is a number which controls the re-sizing of the HashMap.
+
+Q5 How many values does hashmap stores? -> There is no limit for it.
+size() it will return integer, but mappingCount() returns long 
+capacity() -> The capacity of the hashmap.
+
+Q6 What is ConcurrentHashMap? It is thread safe hashMap.
+
+Q7 Can we store duplicate key? No. value? Yes.
+
 
 ========================================================================================================
 
