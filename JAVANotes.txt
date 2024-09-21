@@ -40,6 +40,10 @@ long ll = 12121323345L; // L is used to identify integers as Long.
 
 boolean = true;
 
+//class names can be used as variable names
+int Integer = 10; //valid Syntax
+Integer int = 20; // invalid as int is a keyword.
+
 System.out.println("%d, %.2f, %s, %c",a,b,s,ch);
 
 "VAR"
@@ -141,7 +145,10 @@ int sum(int ...args){
     return res;
 }
 
-// Record is a class which has constructor, getter and setter already created for it. 
+// Record is a class which has constructor, getter and setter already created for it.
+// Records are final classes cannot be inherited
+//Any kind of method can be created using record.
+// Objects of records are immutable, they don't have setters. 
 record Person(String name, int age){}
 
 ========================================================================================================
@@ -614,6 +621,20 @@ public class OuterClass {
 We can achieve multi-threadin by two methods interface "Runnable" and class "Thread".
 The class Thread internally implements "Runnable", which has abstract run() method.
 
+
+//Using Runnable interface.
+class Mythread implements Runnable{
+    @Override
+    public void run(){
+
+    }
+}
+Mythread t1 = new Mythread();
+Thread t = new Thread(t1);
+t.start();
+
+
+//Using Thread Class
 class Mythread extends Thread{
     public void run(){
         for(int i=0;i<n;i++){
@@ -632,6 +653,16 @@ t.start(); // start() method in parent class Thread.
 // Two threads will run first will be use to execute main function, 
 and second for the method called by Mythread.
 
+
+//Using Lambda expression
+Runnable t = ()->{
+    //code for run() method.
+}
+
+Thread t1 = new Thread(t);
+t1.start();
+
+// Thread methods
 currentThread(); // get name of current thread
 getName(); // get the thread name
 setName(); // set thread name
