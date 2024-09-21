@@ -950,3 +950,62 @@ long value = list.stream().reduce(0, (c,e)->c+e);
 List<Integer> streamlist = stream1.collect(Collection.toList());
 
 streamlist.parallelStream() // used to run mutliprocessing operations.
+
+
+========================================================================================================
+
+                           Comparable/ Comparator
+
+=========================================================================================================
+import java.util.ArrayList;
+import java.util.Collections;
+
+class Student implements Comparable<Student>{
+    private int id;
+    private String name;
+
+    public String getName(){
+        return this.name;
+    }
+
+    public int getId(){
+        return this.id;
+    }
+    Student(int id,String name){
+        this.id = id;
+        this.name = name;
+    }
+
+    @Override // Using comparable cannot be used for multiple comparisons.
+    public int compareTo(Student st){
+        return this.id-st.id;
+    }
+
+    @Override
+    public String toString(){
+        return "Student[id= " + id + ", name= " + name;
+    }
+}
+
+class HelloWorld {
+    public static void main(String[] args) {
+        ArrayList<Student> arr = new ArrayList<>();
+        arr.add(new Student(2,"Bhushan"));
+        arr.add(new Student(1,"Bhuvan"));
+        Collections.sort(arr);
+
+        //Comparator (Can we be used to create multiple comparable methods)
+        Collections.sort(arr, (st1, st2)->{
+            return st1.getId() - st2.getId();
+        });
+
+        Collections.sort(arr,(st1,st2)->{
+            return st2.getId()-st1.getId();
+        });
+
+
+        for(Student s:arr){
+            System.out.println(s.getId());
+        }
+    }
+}
