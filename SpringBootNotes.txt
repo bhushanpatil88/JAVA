@@ -1038,4 +1038,69 @@ Then download and autoconfig the module as you include it in pom.xml
 Q3 How it starts?
 Starts by calling main() method of your main class.
 The run() method of SpringBootApplication is called. 
-This method starts the application by creatingan application context and initializing it.
+This method starts the application by creating an application context and initializing it.
+
+Q4. Top annotations
+
+@SpringBootApplication -> consists of 3 annotations @Configuration, @EnableAutoConfiguration, @ComponentScan
+@Autowired
+@Component
+@Service
+@RestController
+
+Q5. What are spring boot starters
+Starters are a collection of pre-configured dependencies that make it easier to 
+develop particular kind of applications.
+
+Q6. What are the key dependencies of Spring boot.
+1. spring-boot-starter-parent.
+2. spring-boot-maven-plugin.
+3. spring-boot-starter-test.
+
+Q7 What is spring-boot-starter-parent?
+IT is starter project which provides default configuration
+for spring-based application.
+
+It provides dependency management
+
+Q8 what is spring boot CLI?
+Command line tool to create,run, manage spring boot application.
+Commands :
+spring --version
+spring init --list
+spring init -d web firstproject // -d dependencies 
+
+Q9 What is thymeleaf?
+Java based server side templating engine used in Java web applications to render dynamic content.
+
+Q10 What is IOC?
+Inverting the control of creating objects to container or framework.
+
+Q11 Explain Spring Bean lifecycle?
+Bean -> Simple plain java objects. Objects of bean are managed by IOC container.
+LifeCycle :
+Conatiner is started, and creates the object of Bean as per request.
+Dependencies of Bean are created and injected
+Destroy the object when container is closed.
+
+Q12 What is bean factory?
+This is root interface for accessing Spring container. Application context is child of bean factory.
+
+
+Q13 what is difference betweeen @Autowired and @Inject?
+Autowired is used for dependency injection.
+@inject is standard annotation for dependency injection and autowired is spring specific.
+
+Q14 what are different bean scopes in spring?
+
+Singleton -> The bean instance will be created only once and same instance will be returned by IOc container.
+Prototype -> The bean instance will be created each time when requested.
+Request -> The bean instace will be created per HTTP request.
+Session -> Will be created per HTTP session.
+GlobalSession -> Will be created per HTTP global session.
+
+Q15 What is connection pooling?
+Connection pooling in Spring Boot refers to a technique used to manage and reuse database connections efficiently, 
+which improves performance and resource utilization. Instead of opening and closing a new database connection 
+for each user request, a pool of pre-created connections is maintained. These connections are reused, 
+reducing the overhead of repeatedly establishing and tearing down database connections.
