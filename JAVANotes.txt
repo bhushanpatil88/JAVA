@@ -1011,8 +1011,24 @@ long value = list.stream().reduce(0, (c,e)->c+e);
 List<Integer> streamlist = stream1.collect(Collection.toList());
 
 streamlist.parallelStream() // used to run mutliprocessing operations.
+========================================================================================================
 
+                          File Handling 
 
+=========================================================================================================
+// Reading from BufferedReader
+BufferedReader reader = new BufferedReader(new FileReader("file.txt"));
+String line;
+while ((line = reader.readLine()) != null) {
+    System.out.println(line);
+}
+reader.close();
+
+// Writing with BufferedWriter
+BufferedWriter writer = new BufferedWriter(new FileWriter("file.txt"));
+writer.write("Hello, World!");
+writer.newLine();
+writer.close();
 ========================================================================================================
 
                            Comparable/ Comparator
