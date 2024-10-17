@@ -145,7 +145,7 @@ int sum(int ...args){
     return res;
 }
 
-// Record is a class which has constructor, getter and setter already created for it.
+// Record is a class which has constructor, getter already created for it.
 // Records are final classes cannot be inherited
 //Any kind of method can be created using record.
 // Objects of records are immutable, they don't have setters. 
