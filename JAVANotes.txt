@@ -106,9 +106,14 @@ public class Example {
 =========================================================================================================
 
 
-String -> it is immutable and non synchronized.
-StringBuffer -> Mutable and synchronized
-StringBuilder -> Mutable and non synchronized
+String -> it is immutable / non synchronized / slow / more memory
+StringBuffer -> Mutable / synchronized / fast / less memory
+StringBuilder -> Mutable / non synchronized / fastest / less memory
+
+String s1 = new String("ABC"); // stored in heap memory + string constant pool
+String s2 = "ABC"; // stored in String constant pool
+StringBuffer s3 = new StringBuffer("ABC"); //  stored in heap memory
+StringBuilder s3 = new StringBuilder("ABC"); //  stored in heap memory
 
 String s = "ABCD";
 s.length();
