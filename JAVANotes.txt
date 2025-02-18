@@ -117,7 +117,9 @@ StringBuilder s3 = new StringBuilder("ABC"); //  stored in heap memory
 
 String s = "ABCD";
 s.length();
-s.charAt(0); // s[0] not possible in java
+s.charAt(0); // s[0] not possible in java String / possible for char[] 
+s1.equals(s2) // Check the equality of content only
+s1 == s2 // check the equality of object
 s.toUpperCase();
 s.toLowerCase();
 s.trim();
