@@ -926,6 +926,22 @@ Q7 Can we store duplicate key? No. value? Yes.
 
 ========================================================================================================
 
+                            Sorting different Data structures
+
+=========================================================================================================
+int[]	                  Arrays.sort(arr, (a,b)-> b - a)
+int[][]	                Arrays.sort(arr, Comparator.comparingInt(a -> a[1]));
+List<Integer>	          list.sort(Collections.reverseOrder());
+List<Integer>           list.sort((a, b) -> b - a); / Collections.sort(list)
+List<int[]>             list.sort(Comparator.comparingInt(a -> a[0]));
+List<List<Integer>>     list.sort(Comparator.comparingInt(a -> a.get(0)));
+List<List<Integer>>     list.sort(Comparator.comparingInt(a -> a.get(0)).reversed());
+List<String>	          list.sort(Comparator.comparingInt(String::length))	
+Set<Integer>            new TreeSet<>((a, b) -> b - a)	
+PriorityQueue<Integer>	new PriorityQueue<>((a, b) -> b - a)	
+
+========================================================================================================
+
                             Lambda expression/ Method and Constructor reference / Stream Api
 
 =========================================================================================================
