@@ -571,6 +571,9 @@ OuterClass outer = new OuterClass();
 OuterClass.InnerClass inner = outer.new InnerClass();
 inner.display();
 
+Can access private members of the outer class.
+Requires an instance of the outer class to create an instance of the inner class.
+
 2. Static inner class
 public class OuterClass {
     private static String staticOuterField = "Static outer field value";
@@ -591,6 +594,9 @@ public class OuterClass {
         nested.display();
     }
 }
+
+Can access only static members of the outer class.
+Does not require an instance of the outer class.
 
 3. Local inner class
 
