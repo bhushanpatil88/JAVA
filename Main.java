@@ -1,11 +1,7 @@
-
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.abs;
-import static java.lang.System.out;
-import java.util.*;
 import java.io.*;
+import java.util.*;
 import java.math.*;
+import static java.lang.Math.*;
 
 
 
@@ -14,7 +10,7 @@ public class Main
     static FastReader in = new FastReader();
     static PrintWriter out = new PrintWriter(System.out);
     
-    public static void solve() throws Exception{
+    public static void solve() {
             int n = in.nextInt();
             String s = in.nextLine();
             int [] arr = in.readArr(n);
@@ -22,33 +18,31 @@ public class Main
             out.print(s);
     }
     
-    public static void main(String hi[]) throws Exception
-    {
+    public static void main(String args[]) {
         try {
             
             int T=in.nextInt();
             while(T-- > 0){
                 solve();
             }
-            out.close();
         } catch (Exception e) {
-            return;
+        }
+        finally{
+            out.close();
         }
         
     }
 
     static class FastReader{
-        BufferedReader br;
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
-        public FastReader(){
-            br=new BufferedReader(new InputStreamReader(System.in));
-        }
         String next(){
             while(st==null || !st.hasMoreTokens()){
                 try {
                     st=new StringTokenizer(br.readLine());
                 } catch (IOException e) {
                     e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
             }
             return st.nextToken();
@@ -63,13 +57,11 @@ public class Main
             return Double.parseDouble(next());
         }
         String nextLine(){
-            String str="";
             try {
-                str=br.readLine().trim();
-            } catch (Exception e) {
-                e.printStackTrace();
+                return br.readLine().trim();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-            return str;
         }
 
         int[] readArr(int N){
@@ -91,7 +83,7 @@ public class Main
         if(n < 2) return false;
         if(n == 2 || n == 3) return true;
         if(n%2 == 0 || n%3 == 0) return false;
-        long sqrtN = (long)Math.sqrt(n)+1;
+        long sqrtN = (long)sqrt(n)+1;
         for(long i = 6L; i <= sqrtN; i += 6) {
             if(n%(i-1) == 0 || n%(i+1) == 0) return false;
         }
@@ -99,11 +91,7 @@ public class Main
     }
     public static long gcd(long a, long b)
     {
-        if(a > b)
-            a = (a+b)-(b=a);
-        if(a == 0L)
-            return b;
-        return gcd(b%a, a);
+        return (b == 0) ? a : gcd(b, a % b);
     }
     public static long totient(long n)
     {
@@ -119,21 +107,17 @@ public class Main
             result -= result/n;
         return result;
     }
-    public static ArrayList<Integer> findDiv(int N)
+    public static List<Integer> findDiv(int N)
     {
-        ArrayList<Integer> ls1 = new ArrayList<Integer>();
-        ArrayList<Integer> ls2 = new ArrayList<Integer>();
-        for(int i=1; i <= (int)(Math.sqrt(N)+0.00000001); i++)
-            if(N%i == 0)
-            {
-                ls1.add(i);
-                ls2.add(N/i);
+        List<Integer> divisors = new ArrayList<>();
+        for (int i = 1; i * i <= N; i++) {
+            if (N % i == 0) {
+                divisors.add(i);
+                if (i != N / i) divisors.add(N / i);
             }
-        Collections.reverse(ls2);
-        for(int b: ls2)
-            if(b != ls1.get(ls1.size()-1))
-                ls1.add(b);
-        return ls1;
+        }
+        Collections.sort(divisors);
+        return divisors;
     }
     public static void sort(int[] arr)
     {
