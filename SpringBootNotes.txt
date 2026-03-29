@@ -192,7 +192,7 @@ When we use @Autowired on any field we call it field injection.
 Myclass myclass 
 
 Setter injection
-When we use @Autowired on any setter we call it field injection.
+When we use @Autowired on any setter we call it setter injection.
 @Autowired
 public void setter(Myclass myclass){
     this.myclass = myclass;
@@ -205,6 +205,9 @@ we don't need to use keyword @Autowired on a Constructor
 MyConstructor(Myclass myclass){
     this.myclass = myclass;
 }
+
+Constructor injection is always recommended as it ensures required dependencies are provided at 
+object creation.
 
 =====================================================================
                         Lazy initialization
@@ -1042,7 +1045,13 @@ This method starts the application by creating an application context and initia
 
 Q4. Top annotations
 
-@SpringBootApplication -> consists of 3 annotations @Configuration, @EnableAutoConfiguration, @ComponentScan
+@SpringBootApplication -> consists of 3 annotations
+@Configuration, -> marks class as configuration class where beans are defined.
+@EnableAutoConfiguration -> enables auto-configuration, where beans are configured based on 
+                            dependencies
+@ComponentScan -> Tells spring to scan for beans in package and subpackages.
+
+Other types of annotations 
 @Autowired
 @Component
 @Service
@@ -1079,12 +1088,24 @@ Inverting the control of creating objects to container or framework.
 Q11 Explain Spring Bean lifecycle?
 Bean -> Simple plain java objects. Objects of bean are managed by IOC container.
 LifeCycle :
-Conatiner is started, and creates the object of Bean as per request.
-Dependencies of Bean are created and injected
-Destroy the object when container is closed.
+Bean Instantiation
+Spring creates the bean object.
+
+Dependency Injection
+Required dependencies are injected.
+
+Initialization
+Initialization logic runs (@PostConstruct, afterPropertiesSet()).
+
+Bean Ready for Use
+The bean is now available in the application.
+
+Destruction
+Before shutdown, cleanup methods run (@PreDestroy).
 
 Q12 What is bean factory?
-This is root interface for accessing Spring container. Application context is child of bean factory.
+This is root interface for accessing Spring container. 
+Application context is advanced version of bean factory.
 
 
 Q13 what is difference betweeen @Autowired and @Inject?
@@ -1104,3 +1125,184 @@ Connection pooling in Spring Boot refers to a technique used to manage and reuse
 which improves performance and resource utilization. Instead of opening and closing a new database connection 
 for each user request, a pool of pre-created connections is maintained. These connections are reused, 
 reducing the overhead of repeatedly establishing and tearing down database connections.
+
+Q16 What is @PathVariable, @RequestParam @RequestBody
+
+@PathVariable is used to extract values from the URL path.
+
+@GetMapping("/users/{id}") //url = /users/10
+public String getUser(@PathVariable int id) {
+    return "User id: " + id;
+}
+
+@RequestParam is used to get query parameters from the URL.
+
+@GetMapping("/users")  // url = /users?id=10
+public String getUser(@RequestParam int id) {
+    return "User id: " + id;
+}
+
+@RequestBody is used to read JSON data from the HTTP request body and convert it into a Java object.
+
+@PostMapping("/users")
+public String createUser(@RequestBody User user) {
+    return user.getName();
+}
+
+Q17 How to return custom HTTP status?
+
+In Spring Boot, you can return a custom HTTP status using ResponseEntity or @ResponseStatus.
+
+ResponseEntity is a class used to control the entire HTTP response, 
+including: Status code, Response body, Headers
+
+@GetMapping("/user")
+public ResponseEntity<String> getUser() {
+    return new ResponseEntity<>("User created", HttpStatus.CREATED);
+}
+
+@ResponseStatus is used to define the HTTP status returned by a controller method.
+
+@ResponseStatus(HttpStatus.CREATED)
+@PostMapping("/user")
+public String createUser() {
+    return "User created";
+}
+
+Q18 What is application properties?
+
+application.properties is a configuration file in Spring Boot used to define
+application settings such as: server port, database configuration, logging, custom properties
+
+
+Q19 What is Spring Data JPA?
+
+Spring Data JPA is a module of Spring that simplifies database access using JPA.
+It automatically provides CRUD operations and query methods without 
+writing much boilerplate code.
+
+There are different types of repositories 
+
+CrudRepository provides basic CRUD operations save(), findById(), findAll(), delete()
+Extends CrudRepository and adds pagination and sorting support. findAll(), 
+Extends PagingAndSortingRepository and provides additional JPA-specific features, flush(), saveAndFlash()
+
+CrudRepository → basic CRUD
+PagingAndSortingRepository → CRUD + pagination/sorting
+JpaRepository → everything + JPA specific features (most commonly used)
+
+Q20 What is @Transactional
+
+It is provided to ensure that the operation is completed properly or no operation is performed.
+It follows ACID principles
+Atomicity - A transaction is all or nothing.
+Consistency -  A transaction must keep the database in a valid state.
+Isolation - Multiple transactions can run simultaneously without affecting each other.
+Durability - Once a transaction is committed, the data is permanently stored, even if the system crashes.
+
+Q21 What is spring security ?
+
+Spring Security is a framework used to secure Spring applications by providing:
+Authentication (who the user is)
+Authorization (what the user can access)
+Protection against attacks like CSRF, session fixation, etc.
+
+Authentication
+Verifies the identity of the user.
+Example: username and password login.
+Spring Security checks credentials using UserDetailsService / AuthenticationManager.
+
+Authorization
+Happens after authentication.
+Determines what resources the user can access.
+
+
+Q22 What is UserDetailService, SecurityFilterChain
+
+UserDetailsService is an interface in Spring Security 
+used to load user-specific data during authentication.
+It has one method loadUserByUsername() to be overridden
+
+SecurityFilterChain defines security rules for HTTP requests in Spring Security.
+It controls:
+which endpoints require authentication
+which endpoints are public
+authorization rules
+
+Q23 What are Actuator? 
+
+Spring Boot Actuator is a module that provides production-ready 
+monitoring and management features for a Spring Boot application.
+It exposes HTTP endpoints to check the health, metrics, and internal state of the application.
+
+Comman endpoints are : 
+/actuator/health
+Shows application health status.
+
+/actuator/info
+Displays application information.
+
+/actuator/metrics
+Shows application performance metrics.
+
+/actuator/env
+Displays environment properties.
+
+/actuator/beans
+Lists all Spring beans.
+
+/actuator/loggers
+View or change logging levels.
+
+Q24 What is dispatcher servlet?
+DispatcherServlet is the front controller of Spring MVC that handles all incoming requests 
+and dispatches them to the correct controller.
+
+Flow: 
+Client sends HTTP request.
+DispatcherServlet receives the request.
+It finds the appropriate controller using HandlerMapping.
+Controller processes the request.
+Response is returned to the client.
+
+Q25 What is ServiceDiscovery, API Gateway, Circuit Breaker?
+
+Service Discovery is a mechanism that allows microservices to
+find and communicate with each other automatically.
+Instead of hardcoding service locations, services register themselves in a registry,
+and other services discover them dynamically.
+
+Tools used : Eureka, Zookeper
+
+An API Gateway is a single entry point for all client requests in a microservices system.
+
+It handles:
+Routing requests to appropriate services
+Authentication
+Rate limiting
+Load balancing
+Tools: Netflix Zull
+
+A Circuit Breaker is a pattern used to prevent cascading failures in microservices.
+If a service repeatedly fails:
+The circuit breaker stops calling that service temporarily
+Returns a fallback response
+Once the service recovers, requests are allowed again.
+
+Tools : Hystrix 
+
+Q26 What is caching? how does spring boot support it?
+
+Caching is the process of storing frequently accessed data in a temporary storage (cache) so that 
+future requests can be served faster without hitting the database or external service.
+
+Spring Boot provides caching using Spring Cache abstraction.
+@EnableCaching -> on SpringBootApplication enables caching 
+@Cacheable -> store the result of method in cache
+@CacheEvict -> removes data from cache 
+@CachePut -> Updates cache
+
+Q27 What is Splunk?
+log management and monitoring tool used to collect, analyze, 
+and visualize logs generated by applications and servers.
+In Spring Boot applications, Splunk is commonly used to monitor application logs in production.

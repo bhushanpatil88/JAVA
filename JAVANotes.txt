@@ -1441,15 +1441,3 @@ Used to define custom or multiple orderings.
 A separate class implements Comparator.
 Has compare() method.
 Can create multiple sorting sequences.
-
-
-slunk in spring boot
-deploy application if scaling horizontally 
-
-application.properties, application.yaml 
-
-
-zull api gateway 
-service discovery 
-histerix 
-loosely coupling between microservices 
