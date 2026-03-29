@@ -1136,3 +1136,261 @@ private int lowerBound(int[] nums, int start, int end,int target){
         }
         return start;
     }
+========================== Interview Question ===================
+
+Q1 what are features of Java?
+
+Simple – Easy syntax, no pointer arithmetic.
+Object-Oriented – Supports encapsulation, inheritance, polymorphism, abstraction.
+Platform Independent – Write Once Run Anywhere using JVM.
+Secure – No pointers, bytecode verification, JVM security.
+Robust – Strong memory management, exception handling, garbage collection.
+Multithreaded – Supports concurrent execution of threads.
+
+Q2 Why is Java platform independent?
+
+Java is platform independent because Java code is compiled into bytecode, 
+which runs on the JVM (Java Virtual Machine) instead of directly on the operating system.
+Since every operating system has its own JVM, the same bytecode can run 
+anywhere without recompilation.
+
+Q3 Method overloading vs overriding.
+
+Method Overloading
+
+Same method name but different parameters (number or type).
+Happens within the same class.
+Achieves compile-time polymorphism.
+Return type can be different if parameters are different.
+
+Method Overriding
+
+A subclass provides a new implementation of a method from the parent class.
+Method name, parameters, and return type must be same, return type can be covariant.
+Achieves runtime polymorphism.
+Requires inheritance.
+
+Q4 Can we override static methods?
+
+No, static methods cannot be overridden in Java.
+Static methods belong to the class, not to objects. 
+Overriding works with runtime polymorphism, but static
+methods are resolved at compile time.
+
+Q5 Can we override private methods?
+
+No, private methods cannot be overridden in Java.
+
+Private methods are not visible to subclasses, so they cannot be inherited. 
+Since overriding requires inheritance, private methods cannot be overridden.
+
+Q6 What is dynamic memory dispatch?
+
+Dynamic Method Dispatch is the process where the method call is resolved at 
+runtime instead of compile time.
+
+It happens when a parent class reference refers to a child class object, 
+and the overridden method of the child class is called.
+
+Parent p = new Child();
+p.print(); // prints from child, if child and parent both have that method
+
+Q7 Types of inheritance in Java.
+
+Single Inheritance
+One child class inherits from one parent class.
+class A {}
+class B extends A {}
+
+Multilevel Inheritance
+A class inherits from a class which itself inherits from another class.
+class A {}
+class B extends A {}
+class C extends B {}
+
+Hierarchical Inheritance
+Multiple child classes inherit from the same parent class.
+class A {}
+class B extends A {}
+class C extends A {}
+
+Multiple Inheritance (Not supported with classes)
+Java does not support multiple inheritance with classes to avoid ambiguity, 
+but it can be achieved using interfaces.
+
+interface A {}
+interface B {}
+class C implements A, B {}
+
+Q8 Why Java does not support multiple inheritance with classes?
+
+Java does not support multiple inheritance with classes to avoid the Diamond Problem (ambiguity).
+If a class inherits from two parent classes that both have the same method, the compiler would 
+not know which method to use.
+
+Q9 Difference between abstract class and interface, and when to use  what?
+
+Abstract Class
+Can have abstract methods and concrete methods.
+Can have instance variables and constructors.
+A class can extend only one abstract class.
+
+Interface
+Methods are abstract by default (except default and static).
+Variables are public static final.
+A class can implement multiple interfaces.
+
+Use abstract class when we share common behavior or fields
+Use interface when different classes need to follow the same contract.
+
+Q10 Why are Strings immutable?
+
+Security
+Strings are used in sensitive areas like file paths, network connections, class loading.
+Immutability prevents modification.
+
+String Pool Optimization
+Java stores strings in a String Pool to reuse memory. Immutability allows safe sharing 
+of the same object.
+
+Thread Safety
+Since strings cannot change, they are automatically thread-safe.
+
+HashCode Caching
+Strings are used as keys in HashMap. If they were mutable, the hash value 
+could change and break the map.
+
+Q11 Difference between ArrayList, LinkedList, Vector?
+
+ArrayList
+Uses a dynamic array internally.
+Fast random access using index (get() is O(1)).
+Insertion/deletion in middle is slow because elements need shifting.
+Not synchronized (not thread-safe).
+
+LinkedList
+Uses a doubly linked list.
+Insertion/deletion is faster (no shifting needed).
+Random access is slow because traversal is required.
+Not synchronized.
+
+Vector
+Similar to ArrayList (dynamic array).
+Synchronized by default, so it is thread-safe.
+Slower due to synchronization overhead.
+Mostly legacy class, rarely used now.
+
+Q12 Difference between HashSet, LinkedHashSet, TreeSet
+
+HashSet
+Stores unique elements and allows one null element.
+Uses hash table internally.
+Does not maintain insertion order.
+Fastest operations (O(1) average).
+
+LinkedHashSet
+Stores unique elements and allows one null element.
+Maintains insertion order.
+Uses hash table + doubly linked list internally.
+Slightly slower than HashSet.
+
+TreeSet
+Stores unique elements in sorted order.
+Uses Red-Black Tree internally.
+Operations like add/remove/search take O(log n).
+Does not allow null values.
+
+Q13 Difference between HashMap, LinkedHashMap, TreeMap?
+
+HashMap
+Stores key-value pairs.
+Uses a hash table internally.
+No ordering of keys.
+Allows one null key and multiple null values.
+Average operations O(1).
+
+LinkedHashMap
+Same as HashMap but maintains insertion order.
+Uses hash table + doubly linked list.
+Allows one null key and multiple null values.
+Slightly slower than HashMap.
+
+TreeMap
+Stores keys in sorted order.
+Uses a Red-Black Tree.
+Operations take O(log n).
+Does not allow null keys.
+
+Q14 Why HashMap allows one null key?
+HashMap allows one null key because it stores the null key in a special bucket (bucket 0).
+null does not have a hashCode(), Java handles it separately.
+
+Q15 What is Hash Collision?
+A hash collision occurs when two different keys produce the same hash value,
+so they try to store in the same bucket of the hash table.
+
+Q16 What is Load Factor?
+The load factor determines when the HashMap should increase its capacity.
+
+Q17 What happens when two keys have the same hashcode?
+
+If two keys have the same hashcode:
+Java places them in the same bucket.
+It checks equals() to determine if they are the same key.
+If not equal, they are stored in the same bucket using a linked list.
+If the bucket size becomes large (≥8), it converts to a Red-Black Tree
+
+
+Q18 what is lambda expression?
+A Lambda Expression in Java is a short way to write an anonymous function (function without a name).
+It is mainly used to implement functional interfaces (interfaces with only one abstract method).
+
+Runnable r = () -> System.out.println("Hello");
+r.run();
+
+Q19 What is Stream API?
+
+Stream API in Java (introduced in Java 8) is used to process collections 
+of data in a functional style.
+It allows operations like filtering, mapping, sorting, and reducing data in a
+clean and declarative way.
+A stream does not store data, it processes data from collections like List, Set, etc.
+
+list.stream()
+    .filter(x -> x % 2 == 0)
+    .forEach(System.out::println);
+
+Q20 What is map(), filter(), flatMap(), reduce(), parallelStream(), collect()?
+
+map() -> used to transform each element into another form 
+filter() -> used to select elements based on condition 
+flatMap() -> flatten multiple streams into a single stream. 
+reduce() -> a terminal operation used to combine all elements into single result.
+collect() -> a terminal operation used to convert stream result into a collection.
+parallelStream() -> process elements concurrently using multiple threads, improving performance
+
+Q21 What is Object class? explain some of it's methods
+
+Object is the root class of Java. Every class in Java implicitly extends 
+Object if it does not extend another class
+
+Important Methods
+
+1. hashCode()
+Returns an integer hash value for the object.
+Used by hash-based collections like HashMap, HashSet.
+
+2. equals()
+Used to compare two objects for logical equality.
+
+3. toString()
+Returns the string representation of an object.
+
+4. finalize()
+Called by the Garbage Collector before destroying the object.
+
+Q22 What is the contract between equals and hashCode()?
+
+If two objects are equal using equals(), their hashCode must be the same.
+If two objects have the same hashCode, they may or may not be equal.
+If equals() is overridden, hashCode() must also be overridden.
