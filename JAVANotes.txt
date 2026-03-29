@@ -1394,3 +1394,62 @@ Q22 What is the contract between equals and hashCode()?
 If two objects are equal using equals(), their hashCode must be the same.
 If two objects have the same hashCode, they may or may not be equal.
 If equals() is overridden, hashCode() must also be overridden.
+
+Q23 What is thread lifecycle?
+New -> Runnable -> Running -> Blocked/waiting -> terminated 
+
+When we create a new thread it is in New state 
+Thread t = new Thread();
+t.start() -> thread is in runnable state, ready to get picked by CPU
+
+Thread is in running state, if it is running run() method.
+
+Blocked/WAtiing -> Thread might wait to unlock the critical section
+Terminated -> When thread is finised processing it is terminated.
+
+
+Q24 what is marker interface?
+Marker interfaces do not define methods, they just signal 
+special behavior to the JVM or libraries. 
+Example are Serializable, Cloneable, RandomAccess
+
+Q25 What is Serialization?
+Serialization in Java is the process of converting an object into a byte stream, 
+so it can be saved to a file, sent over a network, or stored in memory.
+Classes must implement the Serializable interface (a marker interface).
+
+It has a serialVersionUID, which is a unqiue identifier for Serializable class in Java.
+It is used during deserialization to verify that the sender and receiver of a serialized 
+object have compatible class versions.
+
+class Student implements Serializable {
+    private static final long serialVersionUID = 1L;
+    int id;
+    String name;
+}
+
+Q26 What is difference between comparator and comparable interface?
+
+Comparable
+Used to define natural ordering of objects.
+The class must implement Comparable.
+Has compareTo() method.
+Only one sorting sequence possible.
+
+Comparator
+Used to define custom or multiple orderings.
+A separate class implements Comparator.
+Has compare() method.
+Can create multiple sorting sequences.
+
+
+slunk in spring boot
+deploy application if scaling horizontally 
+
+application.properties, application.yaml 
+
+
+zull api gateway 
+service discovery 
+histerix 
+loosely coupling between microservices 
