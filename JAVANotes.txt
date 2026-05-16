@@ -154,9 +154,27 @@ int sum(int ...args){
 
 // Record is a class which has constructor, getter already created for it.
 // Records are final classes cannot be inherited
-//Any kind of method can be created using record.
 // Objects of records are immutable, they don't have setters. 
+// They already have hashCode(), toString(), equals() already created.
+
 record Person(String name, int age){}
+
+Person p = new Person(name="ABC", age=23);
+Sout(p.name()) // can't use getName()
+Sout(p.age())
+
+Can add methods/ custom Constructor in Record 
+record Person(String name, int age){
+   public User {
+        if(age < 0) {
+            throw new IllegalArgumentException("Age cannot be negative");
+        }
+    }
+  public int getWeight(int age){
+    return age*25;  
+  }
+}
+
 
 ========================================================================================================
 
