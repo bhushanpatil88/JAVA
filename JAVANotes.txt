@@ -30,7 +30,8 @@ Hence if we have only one public class this conditions are met.
 
 byte, short, int, long, float, double, String, char, boolean
 
-
+byte b = 100; 1 byte = 8 bits (-128 to 127)
+short st = 30000; 2 byte = 1 short = 16 bits (-2^15 to 2^15-1)
 int a = 10;
 float b = 20.233f; // f is used to identify decimals as float.
 double d1 = 20.232323232d; // D is used to identify decimals as double which is by default.
