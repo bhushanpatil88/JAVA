@@ -73,8 +73,20 @@ var str = (String) null; // OK
 Scanner sc = new Scanner(System.in);
 
 int a = sc.nextInt();
+long b = sc.nextLong();
+double d = sc.nextDouble();
+
 String s = sc.next(); // takes string till whitespace
 String ss = sc.nextLine(); // takes string till newline
+
+
+int n = sc.nextInt();
+string s = sc.nextLine();
+// s is empty as nextInt() doesn't consider \n after input, so that \n is picked by nextLine(), that's why it is empty
+// because it reads only till \n
+//Input form is like
+5\n  -> nextInt() only reads 5 and nextLine() reads the \n, add one more nextLine() to read the \n after 5
+"hello"\n
 
 public class Example {
     // throws defines that there is possibility of exception
