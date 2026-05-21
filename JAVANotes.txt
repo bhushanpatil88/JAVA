@@ -1472,3 +1472,15 @@ Used to define custom or multiple orderings.
 A separate class implements Comparator.
 Has compare() method.
 Can create multiple sorting sequences.
+
+Q27 What are the important versions of Java and what are their features?
+Version	      Famous Feature
+Java 5	        Generics
+Java 7	        Try-with-resources
+Java 8 (LTS)    Lambdas
+Java 9	        Modules
+Java 10	        var
+Java 14/16	    Records
+Java 17	(LTS)        Sealed classes
+Java 21	(LTS)       Virtual threads
+LTS = Long term support, current latest version is Java 24
